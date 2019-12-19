@@ -16,5 +16,5 @@ docker build -t ribo-jekyll .
 Then run the docker image:
 
 ```
-docker run --rm  -p 4000:4000  --name ribo -v ${PWD}:/srv/jekyl ribo-jekyll
+docker run --rm  -p 4000:4000  --name ribo -v ${PWD}:/srv/jekyll ribo-jekyll
 ```

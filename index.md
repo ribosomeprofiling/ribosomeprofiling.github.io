@@ -1,11 +1,11 @@
 ---
 layout: page
-title: A Software Ecosystem for Ribosome Profiling Data 
-tagline: 
+title: A Software Ecosystem for Ribosome Profiling Data
+tagline:
 ---
 {% include JB/setup %}
 
-Ribo Ecosystem is a set of software tools, built around the ribo file format, to facilitate 
+Ribo Ecosystem is a set of software tools, built around the ribo file format, to facilitate
 analyzing ribosome profiling data at ribosome protected footprint length resolution.
 It consists of a pipeline, RiboFlow, and two interfaces RiboR and RiboPy.
 
@@ -13,43 +13,43 @@ It consists of a pipeline, RiboFlow, and two interfaces RiboR and RiboPy.
 
 Please follow these steps to process your ribosome profiling experiment(s):
 
-  1. **Have Your Data Ready:** Have your sequencing data ready in gzipped fastq format. 
+  1. **Have Your Data Ready:** Have your sequencing data ready in gzipped fastq format.
 
   2. **Prepare Your Parameters File:** RiboFlow requires a parameters file. We provide a version that works with human ribosome profiling data [here](https://github.com/ribosomeprofiling/riboflow/blob/master/project.yaml).
  Please modify according to your needs.
 
-  3. **Generate Ribo Files:** Using 
-  [RiboFlow](https://github.com/ribosomeprofiling/riboflow), 
+  3. **Generate Ribo Files:** Using
+  [RiboFlow](https://github.com/ribosomeprofiling/riboflow),
   you can process your data and generate a ribo file. The structure of the ribo file format is available in
   [RiboPy documentation](https://ribopy.readthedocs.io/en/latest/ribo_file_format.html).
 
- 4. **Analyze Your Data:** There are two alternatives to analyze ribo files. 
+ 4. **Analyze Your Data:** There are two alternatives to analyze ribo files.
   R users can use [RiboR](https://github.com/ribosomeprofiling/ribor).
   Python or command line users can use [RiboPy](https://github.com/ribosomeprofiling/ribopy).
 
 ## RiboFlow
 <a name="RiboFlow"></a>
-RiboFlow is a pipeline that processes ribosome profiling data and 
+RiboFlow is a pipeline that processes ribosome profiling data and
 compiles the results into a ribo file.
 
   * Source code of RiboFlow is available on [Github](https://github.com/ribosomeprofiling/riboflow).
   * Documentation is available on [Github](https://github.com/ribosomeprofiling/riboflow).
-  
+
 #### Installation and Requirements
 You need the following software to run RiboFlow.
   * [NextFlow](https://www.nextflow.io/)
   * [Docker](https://docs.docker.com/install/)
 
 If you don't have Docker, you can use [conda](https://conda.io/en/latest/miniconda.html)
-to install the required RiboFlow dependencies. See the 
+to install the required RiboFlow dependencies. See the
 [Github page](https://github.com/ribosomeprofiling/riboflow)
 for instructions.
 
 #### Quick Start
 
-Make sure that you have 
+Make sure that you have
 [NextFlow](https://www.nextflow.io/)
-and 
+and
 [Docker](https://docs.docker.com/install/)
 installed.
 
@@ -65,7 +65,7 @@ nextflow RiboFlow.groovy -params-file project.yaml -profile docker_local
 # Nextflow will print running times when finished.
 ```
 
-The output files, e.g. alignment statistics and the ribo file, 
+The output files, e.g. alignment statistics and the ribo file,
 are created inside the folder named *output*.
 ```
 ls output
@@ -91,6 +91,9 @@ RiboPy can be installed via pip:
 pip install ribopy
 ```
 
+RiboPy comes with an application programming interface (API) and a command line
+interface (CLI). A walk-through of the API is available [here](/ribopy/api_walkthrough.html){:target="\_blank"}.
+For the CLI, a separate walk-through is available in [this link](/ribopy/cli_walkthrough.html){:target="\_blank"}.
 
 ## RiboR
 <a name="RiboR"></a>
