@@ -116,7 +116,7 @@ install_github("ribosomeprofiling/ribor")
 
 ## Citing
 
-[RiboFlow, RiboR and RiboPy: an ecosystem for analyzing ribosome profiling data at read length resolutionH Ozadam, M Geng, C Cenik
+[RiboFlow, RiboR and RiboPy: an ecosystem for analyzing ribosome profiling data at read length resolution, H. Ozadam, M. Geng, C. Cenik
 Bioinformatics 36 (9), 2929-2931](https://academic.oup.com/bioinformatics/article/36/9/2929/5701654)
 
 ```bibtex
