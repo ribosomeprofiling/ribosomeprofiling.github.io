@@ -1542,7 +1542,7 @@ div.tocify {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p><a href="https://www.nature.com/articles/nrg3645">Ribosome profiling</a> is a sequencing based method to study protein synthesis transcriptome-wide. Actively translating mRNAs are engaged with ribosomes and protein synthesis rates can be approximated by the number of ribosomes that are translating a given mRNA. Ribosome profiling employs an RNase digestion step to recover fragments of RNA protected by ribosomes which are called <strong>Ribosome Protected Footprints (RPFs)</strong>.</p>
-<p>Ribosome profiling data analyses involve several quantifications for each transcript. Specifically, the lengths of the RPFs provide valuable biological information (see, for example, <a href="https://elifesciences.org/articles/01257">Lareau et al.</a> and <a href="https://www.sciencedirect.com/science/article/pii/S1097276518310633?via%3Dihub">Wu et al.</a>). To facilitate ribosome profiling data analyses as a function of RPF length in a highly efficient manner, we implemented a new data format, called <a href="https://ribopy.readthedocs.io/en/latest/ribo_file_format.html">ribo</a>. Files in ribo format are called <strong>.ribo</strong> files.</p>
+<p>Ribosome profiling data analyses involve several quantifications for each transcript. Specifically, the lengths of the RPFs provide valuable biological information (see, for example, <a href="https://elifesciences.org/articles/01257">Lareau et al.</a> and <a href="https://www.sciencedirect.com/science/article/pii/S1097276518310633?via%3Dihub">Wu et al.</a>). To facilitate ribosome profiling data analyses as a function of RPF length in a highly efficient manner, we implemented a new data format, called <a href="https://ribopy.readthedocs.io/en/latest/ribo_file_format.html">ribo</a>. Files in ribo format are called <strong>.ribo</strong> files. The associated paper for the .ribo file and its larger ecosystem can be found <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btaa028/5701654">here</a>.</p>
 <p>RiboR package is an R interface for .ribo files. The package offers a suite of reading functions for .ribo files, and provides plotting functions that are most often employed in ribosome profiling analyses. Using RiboR, one can import .ribo files into the R environment, read ribosome profiling data into data frames and generate essential plots in a few lines of R code.</p>
 <p>This document is structured into several sections. First, we give an overview of the <a href="#ribofileformat">Ribo File format</a> and define <a href="#transcriptregions">transcript regions</a>. Second, we provide instructions and requirements for the <a href="installation">installation</a> of RiboR. Third, we describe how to import a .ribo file to R environment and demonstrate essential ribosome profiling data analyses in three sections:</p>
 <ul>
@@ -2162,6 +2162,28 @@ head(region_lengths, 2)
 #&gt; 1  OR4F5-201    1    50 865    50   88
 #&gt; 2 OR4F29-201    0    34 886    50   25</code></pre>
 </div>
+<div id="functionality-for-multiple-ribo-files" class="section level3">
+<h3>Functionality for Multiple Ribo Files</h3>
+<p>The functions within RiboR take in a single Ribo object. However, the following helper function, <code>read_multiple_files</code>, returns an aggregated data frame, given a named list of Ribo objects and any <code>RiboR</code> reader function of interest (<code>get_metagene</code>, <code>get_region_counts</code>, <code>get_length_distribution</code>, <code>get_coverage</code>, or <code>get_rnaseq</code>) with its associated parameters.</p>
+<pre class="r"><code># helper function
+read_multiple_files &lt;- function(ribo_list, getter_function, ...) {
+  df_list &lt;- lapply(ribo_list, getter_function, ...)
+  df_list &lt;- mapply(cbind, df_list, &quot;study&quot; = names(df_list), SIMPLIFY=FALSE)
+  df &lt;- dplyr::bind_rows(df_list)
+  return (df)
+}</code></pre>
+<p>Note that the <code>compact</code> parameter should be set to <code>FALSE</code> and that the parameters given will be consistently used across all of the Ribo objects in the given list. This means that lists of Ribo objects containing Ribo files with different properties (e.g. Transcript Aliases, RNA-Seq, Coverage) may need to be filtered for consistency before use.</p>
+<pre class="r"><code># create a named Ribo object list of length &gt;= 1
+ribo_file_list &lt;- list(original.ribo)
+names(ribo_file_list) &lt;- c(&quot;GSE65778&quot;)
+
+# try out a function
+read_multiple_files(ribo_list = ribo_file_list, getter_function = get_region_counts, compact = FALSE, tidy = FALSE)
+#&gt;   experiment  UTR5 UTR5J    CDS UTR3J UTR3    study
+#&gt; 1 GSM1606107  7487  6244 146719  3280  806 GSE65778
+#&gt; 2 GSM1606108 10413  8732 191573  4052  908 GSE65778</code></pre>
+<p>As seen in the above output, the names of the Ribo object list allow for a new <code>study</code> column in the resulting data frame to allow for easier filtering and processing in downstream analyses.</p>
+</div>
 </div>
 <div id="optionaldata" class="section level2">
 <h2>Optional Data</h2>
@@ -2323,7 +2345,7 @@ head(rnaseq, 2)
 rnaseq &lt;- get_rnaseq(ribo.object = original.ribo,
                      tidy        = TRUE,
                      alias       = TRUE,
-                     regions     = c(&quot;UTR5J&quot;, &quot;CDS&quot;, &quot;UTR3J&quot;),
+                     region     = c(&quot;UTR5J&quot;, &quot;CDS&quot;, &quot;UTR3J&quot;),
                      experiment  = experiment)
 head(rnaseq, 2)
 #&gt; DataFrame with 2 rows and 4 columns
